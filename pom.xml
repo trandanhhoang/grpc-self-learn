@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.17</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.example</groupId>
+    <artifactId>service-self-learn</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>service-self-learn</name>
+    <description>service-self-learn</description>
+    <properties>
+        <java.version>1.8</java.version>
+        <io.grpc.version>1.20.0</io.grpc.version>
+        <kr.motd.maven.version>1.5.0.Final</kr.motd.maven.version>
+        <org.xolstice.maven.plugins.version>0.5.1</org.xolstice.maven.plugins.version>
+        <com.google.protobuf.version>3.7.1</com.google.protobuf.version>
+        <grpc-spring-boot-starter.version>3.2.2</grpc-spring-boot-starter.version>
+        <opentracing-grpc.version>0.2.3</opentracing-grpc.version>
+        <opentracing-spring-jaeger-cloud-starter.version>3.3.1</opentracing-spring-jaeger-cloud-starter.version>
+        <io.micrometer.version>1.9.16</io.micrometer.version>
+    </properties>
+    <dependencies>
+
+        <!-- Jaeger Opentracing-->
+<!--        https://github.com/opentracing-contrib/java-grpc-->
+        <dependency>
+            <groupId>io.opentracing.contrib</groupId>
+            <artifactId>opentracing-grpc</artifactId>
+            <version>${opentracing-grpc.version}</version>
+        </dependency>
+
+<!--        https://github.com/opentracing-contrib/java-spring-jaeger-->
+        <dependency>
+            <groupId>io.opentracing.contrib</groupId>
+            <artifactId>opentracing-spring-jaeger-cloud-starter</artifactId>
+            <version>${opentracing-spring-jaeger-cloud-starter.version}</version>
+        </dependency>
+
+        <!--  Actuator  -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+<!--        expose 8080 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!--  Spring starter  -->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!--        grpc server-->
+        <dependency>
+            <groupId>io.github.lognet</groupId>
+            <artifactId>grpc-spring-boot-starter</artifactId>
+            <version>${grpc-spring-boot-starter.version}</version>
+        </dependency>
+
+        <!--        grpc-->
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty</artifactId>
+            <version>${io.grpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-protobuf</artifactId>
+            <version>${io.grpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-stub</artifactId>
+            <version>${io.grpc.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.api.grpc</groupId>
+            <artifactId>proto-google-common-protos</artifactId>
+            <version>1.18.0</version>
+        </dependency>
+        <!--  Micrometer Prometheus registry  -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>${io.micrometer.version}</version>
+        </dependency>
+
+        <!--  To provide dependencies for AspectJ in micrometer  -->
+        <!--  https://stackoverflow.com/questions/51749391/timed-annotation-in-spring-metrics#comment90460568_51750133  -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <!--   To support gRPC compilation   -->
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>${kr.motd.maven.version}</version>
+            </extension>
+        </extensions>
+        <plugins>
+            <!--   To support gRPC compilation   -->
+            <plugin>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>${org.xolstice.maven.plugins.version}</version>
+                <configuration>
+                    <protocArtifact>com.google.protobuf:protoc:${com.google.protobuf.version}:exe:${os.detected.classifier}
+                    </protocArtifact>
+                    <pluginId>grpc-java</pluginId>
+                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${io.grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
+                    <protoSourceRoot>${basedir}/src/main/resources/protos</protoSourceRoot>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>compile-custom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--   To support gRPC compilation   -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <image>
+                        <builder>paketobuildpacks/builder-jammy-base:latest</builder>
+                    </image>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

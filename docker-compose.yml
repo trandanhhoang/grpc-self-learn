@@ -1,0 +1,141 @@
+version: '3.9'
+
+services:
+  redis-node-0:
+    image: docker.io/bitnami/redis-cluster:7.0
+    container_name: redis-node-0
+    ports:
+      - "6379:6379"
+    networks:
+      - redis-cluster
+    depends_on:
+      - redis-node-1
+      - redis-node-2
+      - redis-node-3
+      - redis-node-4
+      - redis-node-5
+    environment:
+      REDIS_PASSWORD: password
+      REDIS_CLUSTER_ANNOUNCE_IP: 0.0.0.0
+      REDIS_CLUSTER_ANNOUNCE_HOSTNAME: localhost
+      REDIS_CLUSTER_ANNOUNCE_PORT: 6379
+      REDIS_NODES: redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384
+      REDISCLI_AUTH: password
+      REDIS_CLUSTER_REPLICAS: 1
+      REDIS_CLUSTER_CREATOR: yes
+      REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE: hostname
+
+  redis-node-1:
+    image: docker.io/bitnami/redis-cluster:7.0
+    container_name: redis-node-1
+    ports:
+      - "6380:6380"
+    networks:
+      - redis-cluster
+    environment:
+      REDIS_PORT_NUMBER: 6380
+      REDIS_PASSWORD: password
+      REDIS_CLUSTER_ANNOUNCE_IP: 0.0.0.0
+      REDIS_CLUSTER_ANNOUNCE_PORT: 6380
+      REDIS_CLUSTER_ANNOUNCE_HOSTNAME: localhost
+      REDIS_NODES: redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384
+      REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE: hostname
+
+  redis-node-2:
+    image: docker.io/bitnami/redis-cluster:7.0
+    container_name: redis-node-2
+    ports:
+      - "6381:6381"
+    networks:
+      - redis-cluster
+    environment:
+      REDIS_PORT_NUMBER: 6381
+      REDIS_PASSWORD: password
+      REDIS_CLUSTER_ANNOUNCE_IP: 0.0.0.0
+      REDIS_CLUSTER_ANNOUNCE_PORT: 6381
+      REDIS_CLUSTER_ANNOUNCE_HOSTNAME: localhost
+      REDIS_NODES: redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384
+      REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE: hostname
+
+  redis-node-3:
+    image: docker.io/bitnami/redis-cluster:7.0
+    container_name: redis-node-3
+    ports:
+      - "6382:6382"
+    networks:
+      - redis-cluster
+    environment:
+      REDIS_PORT_NUMBER: 6382
+      REDIS_PASSWORD: password
+      REDIS_CLUSTER_ANNOUNCE_IP: 0.0.0.0
+      REDIS_CLUSTER_ANNOUNCE_PORT: 6382
+      REDIS_CLUSTER_ANNOUNCE_HOSTNAME: localhost
+      REDIS_NODES: redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384
+      REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE: hostname
+
+  redis-node-4:
+    image: docker.io/bitnami/redis-cluster:7.0
+    container_name: redis-node-4
+    ports:
+      - "6383:6383"
+    networks:
+      - redis-cluster
+    environment:
+      REDIS_PORT_NUMBER: 6383
+      REDIS_PASSWORD: password
+      REDIS_CLUSTER_ANNOUNCE_IP: 0.0.0.0
+      REDIS_CLUSTER_ANNOUNCE_PORT: 6383
+      REDIS_CLUSTER_ANNOUNCE_HOSTNAME: localhost
+      REDIS_NODES: redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384
+      REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE: hostname
+
+  redis-node-5:
+    image: docker.io/bitnami/redis-cluster:7.0
+    container_name: redis-node-5
+    ports:
+      - "6384:6384"
+    networks:
+      - redis-cluster
+    environment:
+      REDIS_PORT_NUMBER: 6384
+      REDIS_PASSWORD: password
+      REDIS_CLUSTER_ANNOUNCE_IP: 0.0.0.0
+      REDIS_CLUSTER_ANNOUNCE_PORT: 6384
+      REDIS_CLUSTER_ANNOUNCE_HOSTNAME: localhost
+      REDIS_NODES: redis-node-0:6379 redis-node-1:6380 redis-node-2:6381 redis-node-3:6382 redis-node-4:6383 redis-node-5:6384
+      REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE: hostname
+
+  jaeger:
+#    image: jaegertracing/all-in-one:latest
+    image: jaegertracing/all-in-one:1.25
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
+      - "14268:14268"
+      - "4317:4317"
+
+#  kafka:
+#    image: 'bitnami/kafka:latest'
+#    container_name: api_v2_kafka
+#    platform: linux/amd64
+#    ports:
+#      - '9092:9092'
+#    environment:
+#      ALLOW_PLAINTEXT_LISTENER: yes
+#      KAFKA_ENABLE_KRAFT: yes
+#      KAFKA_CFG_PROCESS_ROLES: broker,controller
+#      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+#      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+#      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+#      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://127.0.0.1:9092
+#      KAFKA_CFG_NODE_ID: 1
+#      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@127.0.0.1:9093
+#      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
+#    volumes:
+#      - kafka:/bitnami/kafka
+
+volumes:
+  kafka:
+
+networks:
+  redis-cluster:

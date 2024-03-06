@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package book.v1;
+
+option java_multiple_files = true;
+option java_package = "book.v1.protobuf";
+
+service BookService {
+  rpc GetBooks (BookRequest) returns (BookList);
+  rpc GetBooks2 (BookRequest) returns (BookList);
+}
+
+message BookRequest {
+  // You can add request parameters here if needed.
+}
+
+message Book {
+  string id = 1;
+  string name = 2;
+}
+
+message BookList {
+  repeated Book books = 1;
+}

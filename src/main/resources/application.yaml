@@ -1,0 +1,31 @@
+grpc:
+  port: 9095
+
+management:
+  endpoints:
+    web:
+      base-path: ""
+      exposure:
+        include: "health, info, prometheus"
+      path-mapping:
+        # mapping /prometheus to /metrics
+        prometheus: "metrics"
+
+opentracing:
+  jaeger:
+    service-name: "bank-binding"
+#    MyTracerConfiguration is using if set enable = false
+    enabled: true
+    http-sender:
+      url: http://localhost:14268/api/traces
+#    udp-sender:
+#      host: localhost
+#      port: 14268
+    log-spans: true
+    enable-b3-propagation: true
+    probabilistic-sampler:
+      sampling-rate: 1.0
+#interceptor:
+#  verbose: true
+#    http-sender:
+#      url: http://localhost:14268/api/traces
